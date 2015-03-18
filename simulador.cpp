@@ -19,7 +19,39 @@ typedef struct nodo {
 
 typedef struct BSTree {
 	struct nodo *raiz; /* ponteiro para a raiz da árvore */
+	int tamanho;
 } BSTree;
+//-----------------------------------------------------arvore
+typedef struct neighbour {
+	short vertex;
+	short flow;
+	struct neighbour *next;	
+} t_neighbour;
+
+typedef struct graph{
+	short V, A;
+	t_neighbour **neighbours;
+} t_graph;
+
+typedef struct traffic{
+	short s;
+	short t;
+	short flow;
+} t_traffic;
+
+//------------------------------------------------------grafo
+t_graph *new_graph(int n) {
+	t_graph *grafo;
+	short i;
+	
+	grafo = (t_graph*)malloc(sizeof(t_graph));//espaço para o grafo como um todo
+	grafo->neighbours = (neighbour**)malloc(n*sizeof(neighbour));//alocando espaço para lista de adjacencia
+	grafo->V = n;
+	for (i=0; i<n; i++)
+		grafo->neighbours[i] = NULL;
+		
+	return grafo;	
+}
 
 void insira(BSTree *arvore,int k){//ponteiro para estrutura,chave a ser inserida
 	nodo *no=NULL,*y=NULL,*yAnt;
@@ -46,6 +78,8 @@ void insira(BSTree *arvore,int k){//ponteiro para estrutura,chave a ser inserida
 		yAnt->esq=no;
 	else
 		yAnt->dir=no;
+		
+	arvore->tamanho++;
 }
 
 void imprima_chave(int k){
@@ -60,11 +94,10 @@ void imprime(nodo *arvore){//raiz do ponteiro
 	}
 }
 
-
 int main(int tam_vet, char *parametros[]){
+	t_graph *grafo=NULL;
 	FILE *topologia=NULL,*trafego=NULL;
-	char linha[4],string1[4],string2[4]; 
-	int num=0,v1=0,v2=0;
+	int v1=0,v2=0;
 	
 	BSTree *arvore;
 
@@ -78,16 +111,23 @@ int main(int tam_vet, char *parametros[]){
 	}
 	
 	fseek(topologia, 15, SEEK_SET);//POSICIONA NO COMEÇO dos vértices do grafo
-	while((fscanf(topologia,"%d %d\n", &v1, &v2))!=EOF ){//le no formato esperado
+	while((fscanf(topologia,"%d %d\n", &v1, &v2))!=EOF ){//le no formato esperado---ERRO quando tem número ímpar de elementos
 		//insere na lista
 		printf("%d %d ",v1, v2);
 		printf("\n");
-		
+		insira(arvore,v1);//inserindo na árvore
+		insira(arvore,v2);
 		//descobrir a quantidade de vértices
 		//criar o grafo vetorzão
 	}
 	fclose(topologia);
 	
+	imprime(arvore->raiz);
+	printf("\n tamanho %d",arvore->tamanho);
+	
+	grafo=new_graph(arvore->tamanho);//montando o grafo
+	if(grafo)
+		printf("\n grafo feito");
 	
 	trafego = fopen(parametros[2],"r");
 	if(!trafego){
