@@ -28,11 +28,6 @@ void Imprime(t_graph *G);
 
 int main(int argc, char **argv) {
 
-	/*if (!argv) {
-		printf("Nenhum arquivo foi informado!\n");
-		return 0;
-	};*/
-	
 	FILE *fp,*trafego;
 	if (!(fp = fopen(argv[1], "r"))) {
 		printf("O primeiro arquivo não pode ser aberto!\n");
@@ -42,12 +37,8 @@ int main(int argc, char **argv) {
 	t_graph *graph;
 	t_neighbour *a;
 	t_traffic *traffic;
-	short links, n, i=0, vs, vt, vetor[100];
-	int tt,j=0;
-	
-	n = 0;
-	tt = 1;
-	links = 7;
+	short links=7, n=0, i=0, vs, vt, vetor[100];
+	int tt=1,j=0;
 	
 	fseek(fp, 15, SEEK_SET);//POSICIONA NO COMEÇO dos vértices no arquivo
 	while((fscanf(fp,"%hi %hi\n", &vs, &vt))!=EOF ) {
@@ -55,9 +46,7 @@ int main(int argc, char **argv) {
 		if (vt > n) n = vt;
 		vetor[i]=vs;//guarda as arestas v1 e v2 para inserir no grafo posteriormente
 		vetor[i+1]=vt;
-		
 		i+=2;
-		
 	}
 	fclose(fp);
 	
@@ -65,16 +54,16 @@ int main(int argc, char **argv) {
 	if(!graph)
 		printf("O grafo nao foi montado!");
 	
-
-	//short q,b;
-
+	n=4;//colocando manualmente
+	printf("n = %hi\n",n);
 	for(j=0;n>0;j+=2){
-		//scanf("%hi %hi", &q,&b);
-		Inserir(graph,vetor[j],vetor[j+1],0);
+		//Inserir(graph,vetor[j],vetor[j+1],0);
 		printf("mandando:  %hi %hi ",vetor[j], vetor[j+1]);
-		//new_link(graph,vetor[j],vetor[j+1],0);
-		printf("\n%d\n",j);
+		new_link(graph,(vetor[j]-1),(vetor[j+1]-1),0);
+		//printf("\n%d\n",j);
+		printf("n = %hi\n",n);
 		n--;
+		
 	}
 		
 	trafego = fopen(argv[2],"r");
@@ -139,7 +128,7 @@ void new_link(t_graph *graph, short s, short t, short flow) {
 
 }
 
-t_neighbour *NewNode(short w, t_neighbour *next, short flow) { 
+/*t_neighbour *NewNode(short w, t_neighbour *next, short flow) { 
     t_neighbour *a = malloc(sizeof (t_neighbour));
     a->vertex = w;
     a->flow = flow;
@@ -160,7 +149,7 @@ void DigraphInsertA(t_graph *G, short v, short w, short cap) {
     G->A++;
 }
 
-/*lê arestas do teclado*/
+//lê arestas do teclado
 void Inserir(t_graph  *G, short V, short W, short cap) {
 
    //scanf("%hi %hi %hi", &V, &W, &cap);
@@ -168,7 +157,7 @@ void Inserir(t_graph  *G, short V, short W, short cap) {
     DigraphInsertA(G, V, W, cap);
    // else break;
     
-}
+}*/
 
 void best_path(t_graph *graph, short s, short t, short d, short n, int tt) {
    
